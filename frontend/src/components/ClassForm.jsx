@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
-import { TextField, MenuItem, Button, Paper, Typography } from "@mui/material";
+import {
+  TextField,
+  MenuItem,
+  Button,
+  Paper,
+  Typography,
+  Box,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export default function ClassForm({ onSuccess }) {
+  const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState({
     level: "",
@@ -34,7 +43,9 @@ export default function ClassForm({ onSuccess }) {
 
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h6">Add Class</Typography>
+      <Typography variant="h6" gutterBottom>
+        Add Class
+      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Level"
@@ -71,9 +82,14 @@ export default function ClassForm({ onSuccess }) {
           ))}
         </TextField>
         {error && <Typography color="error">{error}</Typography>}
-        <Button type="submit" variant="contained">
-          Submit
-        </Button>
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <Button variant="outlined" onClick={() => navigate("/classes")}>
+            Back
+          </Button>
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </Box>
       </form>
     </Paper>
   );

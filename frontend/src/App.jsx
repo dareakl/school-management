@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useLocation, Routes, Route, Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -7,89 +7,23 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import TeacherForm from "./components/TeacherForm";
-import TeacherList from "./components/TeacherList";
-import ClassForm from "./components/ClassForm";
-import ClassList from "./components/ClassList";
+
+import TeachersPage from "./pages/TeachersPage";
+import ClassesPage from "./pages/ClassesPage";
 
 export default function App() {
-  const [view, setView] = useState("teachers");
-  const [showForm, setShowForm] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const location = useLocation();
 
-  const handleRefresh = () => setRefresh(!refresh);
-
-  const renderContent = () => {
-    if (view === "teachers") {
-      return (
-        <>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
-          >
-            <Typography variant="h6">Teachers</Typography>
-            {!showForm && (
-              <Button variant="contained" onClick={() => setShowForm(true)}>
-                Add Teacher
-              </Button>
-            )}
-          </Box>
-          {showForm ? (
-            <TeacherForm
-              onSuccess={() => {
-                handleRefresh();
-                setShowForm(false);
-              }}
-            />
-          ) : (
-            <TeacherList
-              key={refresh + "-teachers"}
-              onAddClick={() => setShowForm(true)}
-            />
-          )}
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
-          >
-            <Typography variant="h6">Classes</Typography>
-            {!showForm && (
-              <Button variant="contained" onClick={() => setShowForm(true)}>
-                Add Class
-              </Button>
-            )}
-          </Box>
-          {showForm ? (
-            <ClassForm
-              onSuccess={() => {
-                handleRefresh();
-                setShowForm(false);
-              }}
-            />
-          ) : (
-            <ClassList
-              key={refresh + "-classes"}
-              onAddClick={() => setShowForm(true)}
-            />
-          )}
-        </>
-      );
-    }
-  };
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}
+          >
             <img
               src="/logo.png"
               alt="Logo"
@@ -98,28 +32,46 @@ export default function App() {
             />
             School Portal
           </Typography>
-          <Button
-            color="inherit"
-            onClick={() => {
-              setView("classes");
-              setShowForm(false);
-            }}
-          >
-            Classes
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => {
-              setView("teachers");
-              setShowForm(false);
-            }}
-          >
-            Teachers
-          </Button>
+          <Box>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/classes"
+              sx={{
+                borderBottom: isActive("/classes")
+                  ? "2px solid white"
+                  : "2px solid transparent",
+                borderRadius: 0,
+                mx: 1,
+              }}
+            >
+              Classes
+            </Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/teachers"
+              sx={{
+                borderBottom: isActive("/teachers")
+                  ? "2px solid white"
+                  : "2px solid transparent",
+                borderRadius: 0,
+                mx: 1,
+              }}
+            >
+              Teachers
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
       <Container maxWidth="md" sx={{ mt: 4 }}>
-        {renderContent()}
+        <Routes>
+          <Route path="/" element={<TeachersPage />} />
+          <Route path="/teachers" element={<TeachersPage />} />
+          <Route path="/teachers/add" element={<TeachersPage addMode />} />
+          <Route path="/classes" element={<ClassesPage />} />
+          <Route path="/classes/add" element={<ClassesPage addMode />} />
+        </Routes>
       </Container>
     </>
   );
