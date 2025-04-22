@@ -7,10 +7,10 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Button,
 } from "@mui/material";
 import api from "../services/api";
-
-export default function TeacherList() {
+export default function TeacherList({ onAddClick }) {
   const [teachers, setTeachers] = useState([]);
 
   useEffect(() => {
@@ -19,9 +19,19 @@ export default function TeacherList() {
     });
   }, []);
 
+  if (teachers.length === 0) {
+    return (
+      <Paper sx={{ p: 3 }}>
+        <Typography>No existing teacher yet.</Typography>
+        <Button variant="contained" onClick={onAddClick} sx={{ mt: 2 }}>
+          Add Teacher
+        </Button>
+      </Paper>
+    );
+  }
+
   return (
     <Paper sx={{ p: 3 }}>
-      <Typography variant="h6">Teachers</Typography>
       <Table>
         <TableHead>
           <TableRow>
