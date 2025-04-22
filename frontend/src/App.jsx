@@ -26,7 +26,7 @@ export default function App() {
             sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}
           >
             <img
-              src="/logo.png"
+              src="/logo.jpg"
               alt="Logo"
               height="30"
               style={{ marginRight: 10 }}

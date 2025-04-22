@@ -13,7 +13,7 @@ export default function NotFoundPage() {
     >
       <Box textAlign="center" mt={8}>
         <img
-          src="https://illustrations.popsy.co/gray/web-error.svg"
+          src="/page404.jpg"
           alt="Page not found"
           style={{ width: "300px", maxWidth: "100%", marginBottom: 20 }}
         />
