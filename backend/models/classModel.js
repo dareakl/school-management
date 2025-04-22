@@ -7,7 +7,14 @@ const Class = sequelize.define("Class", {
   name: DataTypes.STRING,
 });
 
-Teacher.hasMany(Class);
-Class.belongsTo(Teacher, { as: "formTeacher" });
+// Define relationship explicitly with alias and foreign key
+Class.belongsTo(Teacher, {
+  as: "formTeacher",
+  foreignKey: "formTeacherId",
+});
+
+Teacher.hasMany(Class, {
+  foreignKey: "formTeacherId",
+});
 
 module.exports = Class;

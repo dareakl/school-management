@@ -10,7 +10,7 @@ exports.createClass = async (req, res) => {
     const newClass = await Class.create({
       level,
       name,
-      TeacherId: teacher.id,
+      formTeacherId: teacher.id,
     });
     res.status(201).json(newClass);
   } catch (err) {
