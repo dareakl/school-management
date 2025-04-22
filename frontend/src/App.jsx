@@ -10,6 +10,7 @@ import {
 
 import TeachersPage from "./pages/TeachersPage";
 import ClassesPage from "./pages/ClassesPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   const location = useLocation();
@@ -71,6 +72,8 @@ export default function App() {
           <Route path="/teachers/add" element={<TeachersPage addMode />} />
           <Route path="/classes" element={<ClassesPage />} />
           <Route path="/classes/add" element={<ClassesPage addMode />} />
+          {/* 404 Route */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Container>
     </>

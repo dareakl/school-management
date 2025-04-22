@@ -1,7 +1,25 @@
 import { useState } from "react";
-import { TextField, Button, Paper, Typography, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  Box,
+  MenuItem,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+
+const subjects = [
+  "English Language",
+  "Mother Tongue Language",
+  "Mathematics",
+  "Science",
+  "Art",
+  "Physical Education",
+  "Social Studies",
+  "Character and Citizenship Education",
+];
 
 export default function TeacherForm({ onSuccess }) {
   const navigate = useNavigate();
@@ -34,20 +52,61 @@ export default function TeacherForm({ onSuccess }) {
         Add Teacher
       </Typography>
       <form onSubmit={handleSubmit}>
-        {["name", "subject", "email", "contactNumber"].map((field) => (
+        <Box mb={2}>
+          <Typography>Name</Typography>
           <TextField
-            key={field}
-            label={field}
-            name={field}
-            value={form[field]}
+            name="name"
+            value={form.name}
             onChange={handleChange}
             fullWidth
-            margin="normal"
             required
           />
-        ))}
+        </Box>
+
+        <Box mb={2}>
+          <Typography>Subject</Typography>
+          <TextField
+            select
+            name="subject"
+            value={form.subject}
+            onChange={handleChange}
+            fullWidth
+            required
+          >
+            {subjects.map((subject) => (
+              <MenuItem key={subject} value={subject}>
+                {subject}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Box>
+
+        <Box mb={2}>
+          <Typography>Email Address</Typography>
+          <TextField
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+        </Box>
+
+        <Box mb={2}>
+          <Typography>Work Contact Number</Typography>
+          <TextField
+            name="contactNumber"
+            value={form.contactNumber}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+        </Box>
+
         {error && <Typography color="error">{error}</Typography>}
-        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={3}>
           <Button variant="outlined" onClick={() => navigate("/teachers")}>
             Back
           </Button>

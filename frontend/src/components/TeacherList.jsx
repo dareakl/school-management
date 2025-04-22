@@ -7,11 +7,15 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Box,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-export default function TeacherList({ onAddClick }) {
+
+export default function TeacherList() {
   const [teachers, setTeachers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api.get("/teachers").then((res) => {
@@ -19,39 +23,59 @@ export default function TeacherList({ onAddClick }) {
     });
   }, []);
 
-  if (teachers.length === 0) {
-    return (
-      <Paper sx={{ p: 3 }}>
-        <Typography>No existing teacher yet.</Typography>
-        <Button variant="contained" onClick={onAddClick} sx={{ mt: 2 }}>
-          Add Teacher
-        </Button>
-      </Paper>
-    );
-  }
-
   return (
     <Paper sx={{ p: 3 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Subject</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Contact</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {teachers.map((teacher, index) => (
-            <TableRow key={index}>
-              <TableCell>{teacher.name}</TableCell>
-              <TableCell>{teacher.subject}</TableCell>
-              <TableCell>{teacher.email}</TableCell>
-              <TableCell>{teacher.contactNumber}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <Typography variant="h6" gutterBottom>
+        Teachers
+      </Typography>
+
+      {teachers.length === 0 ? (
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ height: 200 }}
+        >
+          <Typography variant="body1" color="text.secondary" gutterBottom>
+            There are no existing teachers yet.
+          </Typography>
+          <Button variant="contained" onClick={() => navigate("/teachers/add")}>
+            Add Teacher
+          </Button>
+        </Box>
+      ) : (
+        <>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/teachers/add")}
+            >
+              Add Teacher
+            </Button>
+          </Box>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Subject</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Contact</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teachers.map((teacher, index) => (
+                <TableRow key={index}>
+                  <TableCell>{teacher.name}</TableCell>
+                  <TableCell>{teacher.subject}</TableCell>
+                  <TableCell>{teacher.email}</TableCell>
+                  <TableCell>{teacher.contactNumber}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </Paper>
   );
 }
