@@ -12,7 +12,7 @@ export default function ClassForm({ onSuccess }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.post("/teachers").then((res) => {
+    api.get("/teachers").then((res) => {
       setTeachers(res.data.data);
     });
   }, []);
@@ -31,6 +31,7 @@ export default function ClassForm({ onSuccess }) {
       setError(err.response?.data?.error || "Failed to add class.");
     }
   };
+
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6">Add Class</Typography>
