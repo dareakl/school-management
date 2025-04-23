@@ -69,6 +69,17 @@ export default function ClassForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            SelectProps={{
+              displayEmpty: true,
+              renderValue: (selected) => {
+                if (!selected) {
+                  return (
+                    <span style={{ color: "#aaa" }}>Select Class Level</span>
+                  );
+                }
+                return selected;
+              },
+            }}
           >
             {levels.map((level) => (
               <MenuItem key={level} value={level}>
@@ -87,6 +98,7 @@ export default function ClassForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            placeholder="Enter Class Name"
           />
         </Box>
 
@@ -100,11 +112,22 @@ export default function ClassForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            SelectProps={{
+              displayEmpty: true,
+              renderValue: (selected) => {
+                if (!selected) {
+                  return (
+                    <span style={{ color: "#aaa" }}>Assign a Form Teacher</span>
+                  );
+                }
+                return selected;
+              },
+            }}
           >
             {teachers.length > 0 ? (
               teachers.map((teacher) => (
                 <MenuItem key={teacher.email} value={teacher.email}>
-                  {teacher.name} ({teacher.email})
+                  {teacher.name}
                 </MenuItem>
               ))
             ) : (

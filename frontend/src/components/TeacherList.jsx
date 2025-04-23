@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -25,9 +26,9 @@ export default function TeacherList() {
 
   return (
     <Paper sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         Teachers
-      </Typography>
+      </Typography> */}
 
       {teachers.length === 0 ? (
         <Box
@@ -40,27 +41,31 @@ export default function TeacherList() {
           <Typography variant="body1" color="text.secondary" gutterBottom>
             There are no existing teachers yet.
           </Typography>
-          <Button variant="contained" onClick={() => navigate("/teachers/add")}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/teachers/add")}
+            startIcon={<Add />}
+          >
             Add Teacher
           </Button>
         </Box>
       ) : (
         <>
-          <Box display="flex" justifyContent="flex-end" mb={2}>
+          {/* <Box display="flex" justifyContent="flex-end" mb={2}>
             <Button
               variant="contained"
               onClick={() => navigate("/teachers/add")}
             >
               Add Teacher
             </Button>
-          </Box>
+          </Box> */}
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Subject</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Contact</TableCell>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Subject</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Work Contact</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

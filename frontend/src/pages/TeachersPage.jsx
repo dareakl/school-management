@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Typography, Button, Box } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import TeacherForm from "../components/TeacherForm";
 import TeacherList from "../components/TeacherList";
@@ -19,7 +20,11 @@ export default function TeachersPage({ addMode = false }) {
       >
         <Typography variant="h6">Teachers</Typography>
         {!addMode && (
-          <Button variant="contained" onClick={() => navigate("/teachers/add")}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/teachers/add")}
+            startIcon={<Add />}
+          >
             Add Teacher
           </Button>
         )}

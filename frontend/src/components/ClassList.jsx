@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -25,9 +26,9 @@ export default function ClassList() {
 
   return (
     <Paper sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         Classes
-      </Typography>
+      </Typography> */}
 
       {classes.length === 0 ? (
         <Box
@@ -40,26 +41,30 @@ export default function ClassList() {
           <Typography variant="body1" color="text.secondary" gutterBottom>
             There are no existing classes yet.
           </Typography>
-          <Button variant="contained" onClick={() => navigate("/classes/add")}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/classes/add")}
+            startIcon={<Add />}
+          >
             Add Class
           </Button>
         </Box>
       ) : (
         <>
-          <Box display="flex" justifyContent="flex-end" mb={2}>
+          {/* <Box display="flex" justifyContent="flex-end" mb={2}>
             <Button
               variant="contained"
               onClick={() => navigate("/classes/add")}
             >
               Add Class
             </Button>
-          </Box>
+          </Box> */}
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Level</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Form Teacher</TableCell>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell sx={{ fontWeight: "bold" }}>Class Level</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Class Name</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Form Teacher</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

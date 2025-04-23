@@ -60,6 +60,7 @@ export default function TeacherForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            placeholder="Enter Teacher's Name"
           />
         </Box>
 
@@ -72,6 +73,17 @@ export default function TeacherForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            SelectProps={{
+              displayEmpty: true,
+              renderValue: (selected) => {
+                if (!selected) {
+                  return (
+                    <span style={{ color: "#aaa" }}>Select a Subject</span>
+                  );
+                }
+                return selected;
+              },
+            }}
           >
             {subjects.map((subject) => (
               <MenuItem key={subject} value={subject}>
@@ -90,6 +102,7 @@ export default function TeacherForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            placeholder="Enter Valid Email Address"
           />
         </Box>
 
@@ -101,6 +114,7 @@ export default function TeacherForm({ onSuccess }) {
             onChange={handleChange}
             fullWidth
             required
+            placeholder="Enter Contact Number"
           />
         </Box>
 
