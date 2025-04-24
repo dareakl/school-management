@@ -72,6 +72,15 @@ export default function App() {
           <Route path="/teachers/add" element={<TeachersPage addMode />} />
           <Route path="/classes" element={<ClassesPage />} />
           <Route path="/classes/add" element={<ClassesPage addMode />} />
+          <Route
+            path="/teachers/edit/:id"
+            element={<TeachersPage editMode />}
+          />
+          <Route
+            path="/classes/edit/:classId"
+            element={<ClassesPage editMode />}
+          />
+
           {/* 404 Route */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

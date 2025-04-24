@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ClassForm from "../components/ClassForm";
 import ClassList from "../components/ClassList";
 
-export default function ClassesPage({ addMode = false }) {
+export default function ClassesPage({ addMode = false, editMode = false }) {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [refresh, setRefresh] = useState(false);
   const handleRefresh = () => setRefresh(!refresh);
 
@@ -19,7 +20,7 @@ export default function ClassesPage({ addMode = false }) {
         mb={2}
       >
         <Typography variant="h6">Classes</Typography>
-        {!addMode && (
+        {!addMode && !editMode && (
           <Button
             variant="contained"
             onClick={() => navigate("/classes/add")}
@@ -30,8 +31,9 @@ export default function ClassesPage({ addMode = false }) {
         )}
       </Box>
 
-      {addMode ? (
+      {addMode || editMode ? (
         <ClassForm
+          classId={id}
           onSuccess={() => {
             handleRefresh();
             navigate("/classes");

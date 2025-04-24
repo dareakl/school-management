@@ -8,7 +8,7 @@ import {
   Box,
   Link,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 
 // Class levels to show in dropdown
@@ -23,6 +23,7 @@ const levels = [
 
 export default function ClassForm({ onSuccess }) {
   const navigate = useNavigate();
+  const { classId } = useParams(); // Fetching classId from URL parameters
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState({
     level: "",
@@ -31,12 +32,37 @@ export default function ClassForm({ onSuccess }) {
   });
   const [error, setError] = useState("");
 
-  // Fetch teacher list from API
+  // Fetch teachers and class data together
   useEffect(() => {
-    api.get("/teachers").then((res) => {
-      setTeachers(res.data.data);
-    });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const teacherRes = await api.get("/teachers");
+        const teacherList = teacherRes.data.data;
+        setTeachers(teacherList);
+
+        if (classId) {
+          const classRes = await api.get(`/classes/${classId}`);
+          const cls = classRes.data.data;
+
+          // Only update form if the teacher exists
+          const teacherExists = teacherList.some(
+            (t) => t.email === cls.teacherEmail
+          );
+
+          setForm({
+            level: cls.level,
+            name: cls.name,
+            teacherEmail: teacherExists ? cls.teacherEmail : "",
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch data", err);
+        setError("Error loading data. Please try again.");
+      }
+    };
+
+    fetchData();
+  }, [classId]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,19 +70,23 @@ export default function ClassForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/classes", form);
-      setForm({ level: "", name: "", teacherEmail: "" });
+      if (classId) {
+        await api.put(`/classes/${classId}`, form);
+      } else {
+        await api.post("/classes", form);
+      }
       setError("");
       if (onSuccess) onSuccess();
+      navigate("/classes");
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to add class.");
+      setError(err.response?.data?.error || "Failed to submit class.");
     }
   };
 
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Add Class
+        {classId ? "Edit Class" : "Add Class"}
       </Typography>
       <form onSubmit={handleSubmit}>
         {/* Class Level */}
@@ -71,14 +101,10 @@ export default function ClassForm({ onSuccess }) {
             required
             SelectProps={{
               displayEmpty: true,
-              renderValue: (selected) => {
-                if (!selected) {
-                  return (
-                    <span style={{ color: "#aaa" }}>Select Class Level</span>
-                  );
-                }
-                return selected;
-              },
+              renderValue: (selected) =>
+                selected || (
+                  <span style={{ color: "#aaa" }}>Select Class Level</span>
+                ),
             }}
           >
             {levels.map((level) => (
@@ -115,12 +141,12 @@ export default function ClassForm({ onSuccess }) {
             SelectProps={{
               displayEmpty: true,
               renderValue: (selected) => {
-                if (!selected) {
+                if (!selected)
                   return (
                     <span style={{ color: "#aaa" }}>Assign a Form Teacher</span>
                   );
-                }
-                return selected;
+                const teacher = teachers.find((t) => t.email === selected);
+                return teacher?.name || selected;
               },
             }}
           >
@@ -137,7 +163,7 @@ export default function ClassForm({ onSuccess }) {
             )}
           </TextField>
 
-          {/* Show message and Add Teacher link if no teachers exist */}
+          {/* No Teachers Message */}
           {teachers.length === 0 && (
             <Box mt={1}>
               <Typography variant="body2" color="text.secondary">
@@ -154,7 +180,7 @@ export default function ClassForm({ onSuccess }) {
           )}
         </Box>
 
-        {/* Error Message */}
+        {/* Error Display */}
         {error && <Typography color="error">{error}</Typography>}
 
         {/* Buttons */}
@@ -163,7 +189,7 @@ export default function ClassForm({ onSuccess }) {
             Back
           </Button>
           <Button type="submit" variant="contained">
-            Submit
+            {classId ? "Update" : "Submit"}
           </Button>
         </Box>
       </form>

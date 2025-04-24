@@ -9,8 +9,9 @@ import {
   Typography,
   Box,
   Button,
+  IconButton,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Add, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -66,6 +67,7 @@ export default function TeacherList() {
                 <TableCell sx={{ fontWeight: "bold" }}>Subject</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Work Contact</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -75,6 +77,26 @@ export default function TeacherList() {
                   <TableCell>{teacher.subject}</TableCell>
                   <TableCell>{teacher.email}</TableCell>
                   <TableCell>{teacher.contactNumber}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => navigate(`/teachers/edit/${teacher.id}`)}
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={async () => {
+                        if (window.confirm("Delete this teacher?")) {
+                          await api.delete(`/teachers/${teacher.id}`);
+                          const updated = await api.get("/teachers");
+                          setTeachers(updated.data.data);
+                        }
+                      }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

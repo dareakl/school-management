@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -21,7 +21,7 @@ const subjects = [
   "Character and Citizenship Education",
 ];
 
-export default function TeacherForm({ onSuccess }) {
+export default function TeacherForm({ teacherId, onSuccess }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -31,13 +31,36 @@ export default function TeacherForm({ onSuccess }) {
   });
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (teacherId) {
+      api
+        .get(`/teachers/${teacherId}`)
+        .then((res) => {
+          const teacher = res.data.data;
+          setForm({
+            name: teacher.name,
+            subject: teacher.subject,
+            email: teacher.email,
+            contactNumber: teacher.contactNumber,
+          });
+        })
+        .catch(() => {
+          setError("Failed to load teacher");
+        });
+    }
+  }, [teacherId]);
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/teachers", form);
+      if (teacherId) {
+        await api.put(`/teachers/${teacherId}`, form);
+      } else {
+        await api.post("/teachers", form);
+      }
       setForm({ name: "", subject: "", email: "", contactNumber: "" });
       setError("");
       if (onSuccess) onSuccess();
@@ -49,7 +72,7 @@ export default function TeacherForm({ onSuccess }) {
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Add Teacher
+        {teacherId ? "Edit Teacher" : "Add Teacher"}
       </Typography>
       <form onSubmit={handleSubmit}>
         <Box mb={2}>
@@ -125,7 +148,7 @@ export default function TeacherForm({ onSuccess }) {
             Back
           </Button>
           <Button type="submit" variant="contained">
-            Submit
+            {teacherId ? "Update" : "Submit"}
           </Button>
         </Box>
       </form>

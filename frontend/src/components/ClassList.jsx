@@ -9,8 +9,9 @@ import {
   Typography,
   Box,
   Button,
+  IconButton,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Add, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -65,6 +66,7 @@ export default function ClassList() {
                 <TableCell sx={{ fontWeight: "bold" }}>Class Level</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Class Name</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Form Teacher</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -73,6 +75,27 @@ export default function ClassList() {
                   <TableCell>{cls.level}</TableCell>
                   <TableCell>{cls.name}</TableCell>
                   <TableCell>{cls.formTeacher?.name || "N/A"}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => navigate(`/classes/edit/${cls.id}`)}
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={async () => {
+                        if (
+                          window.confirm("Are you sure to delete this class?")
+                        ) {
+                          await api.delete(`/classes/${cls.id}`);
+                          setClasses(classes.filter((c) => c.id !== cls.id));
+                        }
+                      }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
