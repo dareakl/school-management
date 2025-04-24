@@ -25,6 +25,21 @@ exports.getAllTeachers = async (req, res) => {
   }
 };
 
+//Get Single Teachers Details
+exports.getTeacherById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const teacher = await Teacher.findByPk(id);
+
+    if (!teacher) {
+      return res.status(400).json({ error: "Teacher Not Found" });
+    }
+    res.status(200).json({ data: teacher });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 //Update Teacher
 exports.updateTeacher = async (req, res) => {
   try {

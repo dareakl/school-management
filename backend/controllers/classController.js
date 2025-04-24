@@ -36,6 +36,26 @@ exports.getAllClasses = async (req, res) => {
   }
 };
 
+//Get Single Class Details
+exports.getClassById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const foundClass = await Class.findByPk(id, {
+      include: {
+        model: Teacher,
+        as: "formTeacher",
+        attributes: ["name", "email"],
+      },
+    });
+    if (!foundClass) {
+      return res.status(404).json({ error: "Class Not Found" });
+    }
+    res.status(200).json({ data: foundClass });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 //Update Class
 exports.updateClass = async (req, res) => {
   try {
