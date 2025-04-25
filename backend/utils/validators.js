@@ -1,28 +1,91 @@
 const Joi = require("joi");
 
-//Create: all fields required
+// Teacher schema - with detailed validation messages
 const teacherSchema = Joi.object({
-  name: Joi.string().min(2).required(),
-  subject: Joi.string().min(2).required(),
-  email: Joi.string().email().required(),
+  name: Joi.string().min(2).required().messages({
+    "string.base": "Name must be a string",
+    "string.empty": "Name is required",
+    "string.min": "Name must be at least 2 characters",
+    "any.required": "Name is required",
+  }),
+
+  subject: Joi.string().min(2).required().messages({
+    "string.base": "Subject must be a string",
+    "string.empty": "Subject is required",
+    "string.min": "Subject must be at least 2 characters",
+    "any.required": "Subject is required",
+  }),
+
+  // email: Joi.string()
+  //   .email({ tlds: { allow: false } })
+  //   .required()
+  //   .messages({
+  //     "string.base": "Email must be a string",
+  //     "string.email": "This email address is invalid",
+  //     "string.empty": "Email is required",
+  //     "any.required": "Email is required",
+  //   }),
+
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required()
+    .custom((value, helpers) => {
+      if (value.endsWith("@gov.sg") || value.endsWith(".gov.sg")) {
+        return helpers.message("Emails from .gov.sg are not allowed");
+      }
+      return value;
+    })
+    .messages({
+      "string.email": "This email address is invalid",
+      "string.empty": "Email is required",
+      "any.required": "Email is required",
+    }),
+
   contactNumber: Joi.string()
     .pattern(/^[0-9]{8}$/)
-    .required(),
+    .required()
+    .messages({
+      "string.empty": "Work contact is required",
+      "string.pattern.base":
+        "This work contact is invalid (must be 8 digits, no spaces)",
+      "any.required": "Work contact is required",
+    }),
 });
 
-//Update: all fields optional but validated if present
+// Update schema — all fields optional, same rules
 const updateTeacherSchema = teacherSchema.fork(
   ["name", "subject", "email", "contactNumber"],
   (field) => field.optional()
 );
-// Create: Class Schema
+
+// Class creation schema — with detailed messages
 const classSchema = Joi.object({
-  level: Joi.string().required(),
-  name: Joi.string().required(),
-  teacherEmail: Joi.string().email().required(),
+  level: Joi.string().min(1).required().messages({
+    "string.base": "Level must be a string",
+    "string.empty": "Level is required",
+    "string.min": "Level must be at least 1 character",
+    "any.required": "Level is required",
+  }),
+
+  name: Joi.string().min(1).required().messages({
+    "string.base": "Class name must be a string",
+    "string.empty": "Class name is required",
+    "string.min": "Class name must be at least 1 character",
+    "any.required": "Class name is required",
+  }),
+
+  teacherEmail: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.base": "Teacher email must be a string",
+      "string.email": "This teacher email is invalid",
+      "string.empty": "Teacher email is required",
+      "any.required": "Teacher email is required",
+    }),
 });
 
-// New: Class update schema (all fields optional)
+// Class update schema — optional fields, with same messages
 const updateClassSchema = classSchema.fork(
   ["level", "name", "teacherEmail"],
   (field) => field.optional()
