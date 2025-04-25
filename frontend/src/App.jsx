@@ -76,10 +76,7 @@ export default function App() {
             path="/teachers/edit/:id"
             element={<TeachersPage editMode />}
           />
-          <Route
-            path="/classes/edit/:classId"
-            element={<ClassesPage editMode />}
-          />
+          <Route path="/classes/edit/:id" element={<ClassesPage editMode />} />
 
           {/* 404 Route */}
           <Route path="*" element={<NotFoundPage />} />

@@ -8,7 +8,7 @@ import {
   Box,
   Link,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 // Class levels to show in dropdown
@@ -21,9 +21,8 @@ const levels = [
   "Primary 6",
 ];
 
-export default function ClassForm({ onSuccess }) {
+export default function ClassForm({ classId, onSuccess }) {
   const navigate = useNavigate();
-  const { classId } = useParams(); // Fetching classId from URL parameters
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState({
     level: "",
@@ -31,33 +30,46 @@ export default function ClassForm({ onSuccess }) {
     teacherEmail: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch teachers and class data together
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch all teachers
         const teacherRes = await api.get("/teachers");
         const teacherList = teacherRes.data.data;
         setTeachers(teacherList);
 
+        // If editing an existing class
         if (classId) {
           const classRes = await api.get(`/classes/${classId}`);
           const cls = classRes.data.data;
 
-          // Only update form if the teacher exists
+          console.log("Class Data:", cls);
+          console.log("Available Teachers:", teacherList);
+
+          // ✅ Correctly get teacher email from formTeacher
+          const cleanedEmail =
+            cls.formTeacher?.email?.trim().toLowerCase() || "";
+
           const teacherExists = teacherList.some(
-            (t) => t.email === cls.teacherEmail
+            (t) => t.email.toLowerCase() === cleanedEmail
           );
 
           setForm({
-            level: cls.level,
-            name: cls.name,
-            teacherEmail: teacherExists ? cls.teacherEmail : "",
+            level: cls.level || "",
+            name: cls.name || "",
+            teacherEmail: teacherExists ? cleanedEmail : "",
           });
+
+          console.log("Set form with teacherEmail:", cleanedEmail);
         }
+
+        setLoading(false);
       } catch (err) {
         console.error("Failed to fetch data", err);
         setError("Error loading data. Please try again.");
+        setLoading(false);
       }
     };
 
@@ -82,6 +94,10 @@ export default function ClassForm({ onSuccess }) {
       setError(err.response?.data?.error || "Failed to submit class.");
     }
   };
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
@@ -145,7 +161,9 @@ export default function ClassForm({ onSuccess }) {
                   return (
                     <span style={{ color: "#aaa" }}>Assign a Form Teacher</span>
                   );
-                const teacher = teachers.find((t) => t.email === selected);
+                const teacher = teachers.find(
+                  (t) => t.email.toLowerCase() === selected.toLowerCase()
+                );
                 return teacher?.name || selected;
               },
             }}
