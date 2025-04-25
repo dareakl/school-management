@@ -31,7 +31,7 @@ const teacherSchema = Joi.object({
     .required()
     .custom((value, helpers) => {
       if (value.endsWith("@gov.sg") || value.endsWith(".gov.sg")) {
-        return helpers.message("Emails from .gov.sg are not allowed");
+        return helpers.message("This email address is Invalid");
       }
       return value;
     })
@@ -47,7 +47,7 @@ const teacherSchema = Joi.object({
     .messages({
       "string.empty": "Work contact is required",
       "string.pattern.base":
-        "This work contact is invalid (must be 8 digits, no spaces)",
+        "This work contact number is invalid (must be 8 digits, no spaces)",
       "any.required": "Work contact is required",
     }),
 });
