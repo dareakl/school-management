@@ -44,7 +44,7 @@ npm install
 
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=
+DB_PASSWORD=yourpassword
 DB_NAME=school
 DB_PORT=3306
 PORT=3002
@@ -72,7 +72,8 @@ logging: false,
 module.exports = sequelize;
 
 ▶️ 4. Run the Server
-npm start
+
+    npm start
 
 🔗 API Endpoints
 
@@ -102,10 +103,12 @@ Node.js
     npm / yarn
 
 🚀 1. Setup Frontend
-cd frontend
-npm install
+
+    cd frontend
+    npm install
 
 🔁 2. Configure API Base URL
+
 In frontend/src/services/api.js:
 
 import axios from "axios";
@@ -120,7 +123,8 @@ headers: {
 export default api;
 
 ▶️ 3.Start Frontend (Vite Dev Server)
-npm run dev
+
+    npm run dev
 
 📝 Notes
 
