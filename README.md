@@ -151,3 +151,27 @@ Built with:
     # Rebuild frontend or backend
     docker-compose up --build frontend
     docker-compose up --build backend
+
+🔗 Postman Collection
+
+You can import the API collection for testing via Postman:
+
+    📥 Download from here: doc/postman/School Management.postman_collection.json
+
+Tested routes:
+
+    GET /api/teachers
+
+    POST /api/teachers
+
+    PUT /api/teachers/:id
+
+    DELETE /api/teachers/:id
+
+    GET /api/classes
+
+    POST /api/classes
+
+    PUT /api/classes/:id
+
+    DELETE /api/classes/:id
