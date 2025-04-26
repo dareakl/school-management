@@ -156,7 +156,7 @@ Built with:
 
 You can import the API collection for testing via Postman:
 
-    📥 Download from here: doc/postman/School Management.postman_collection.json
+    📥 Download from here: doc/postman/School Management.postman_collection.json(same repo inside doc folder)
 
 Tested routes:
 
@@ -176,47 +176,6 @@ Tested routes:
 
     DELETE /api/classes/:id
 
+## 🖼️ Frontend Screenshots
 
-    ## 🖼️ Frontend Screenshots
-
-    Here are some screenshots of the School Management Portal frontend built using **React + Vite + MUI**:
-
-    ### 🔹 Dashboard / Class List Page
-    Displays all available classes and their assigned form teachers.
-
-    ![Class List](screenshots/class-list.png)
-
-    ---
-
-    ### 🔹 Add New Class
-    Form to create a new class by selecting level, name, and assigning a teacher.
-
-    ![Add Class](screenshots/add-class.png)
-
-    ---
-
-    ### 🔹 Edit Class
-    Update an existing class with new teacher or class name.
-
-    ![Edit Class](screenshots/edit-class.png)
-
-    ---
-
-    ### 🔹 Teacher List
-    View all teachers with their subjects and contact information.
-
-    ![Teacher List](screenshots/teacher-list.png)
-
-    ---
-
-    ### 🔹 Add Teacher
-    Form to add a new teacher with name, subject, email, and contact number.
-
-    ![Add Teacher](screenshots/add-teacher.png)
-
-    ---
-
-    ### 🔹 Edit Teacher
-    Edit existing teacher details.
-
-    ![Edit Teacher](screenshots/edit-teacher.png)
+    Screens shots added in the screenshot folder for the reference
