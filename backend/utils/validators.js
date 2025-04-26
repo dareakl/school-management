@@ -56,11 +56,17 @@ const updateTeacherSchema = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .optional()
+    .custom((value, helpers) => {
+      if (value.endsWith("@gov.sg") || value.endsWith(".gov.sg")) {
+        return helpers.message("This email address is invalid");
+      }
+      return value;
+    })
     .external(async (value, helpers) => {
       const { id } = helpers?.prefs?.context || {};
       const existing = await Teacher.findOne({ where: { email: value } });
 
-      if (existing && existing.id !== id) {
+      if (existing && existing.id !== parseInt(id)) {
         throw new Error("Email already registered");
       }
     }),
