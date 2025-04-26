@@ -89,21 +89,21 @@ Built with:
 
 👨‍🏫 Teachers
 
-Method | Route | Description
-GET | /api/teachers | Get all teachers
-GET | /api/teachers/:id | Get teacher by ID
-POST | /api/teachers | Create new teacher
-PUT | /api/teachers/:id | Update teacher
-DELETE | /api/teachers/:id | Delete teacher
+Method                 | Route                     | Description
+GET                    | /api/teachers             | Get all teachers
+GET                    | /api/teachers/:id         | Get teacher by ID
+POST                   | /api/teachers             | Create new teacher
+PUT                    | /api/teachers/:id         | Update teacher
+DELETE                 | /api/teachers/:id         | Delete teacher
 
 🏫 Classes
 
-Method | Route | Description
-GET | /api/classes | Get all classes
-GET | /api/classes/:id | Get class by ID
-POST | /api/classes | Create new class
-PUT | /api/classes/:id | Update class
-DELETE | /api/classes/:id | Delete class
+Method                 | Route                     | Description
+GET                    | /api/classes              | Get all classes
+GET                    | /api/classes/:id          | Get class by ID
+POST                   | /api/classes              | Create new class
+PUT                    | /api/classes/:id          | Update class
+DELETE                 | /api/classes/:id          | Delete class
 
 🐳 Docker Setup
 
