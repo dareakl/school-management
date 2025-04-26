@@ -27,10 +27,6 @@ export default function ClassList() {
 
   return (
     <Paper sx={{ p: 3 }}>
-      {/* <Typography variant="h6" gutterBottom>
-        Classes
-      </Typography> */}
-
       {classes.length === 0 ? (
         <Box
           display="flex"
@@ -52,14 +48,6 @@ export default function ClassList() {
         </Box>
       ) : (
         <>
-          {/* <Box display="flex" justifyContent="flex-end" mb={2}>
-            <Button
-              variant="contained"
-              onClick={() => navigate("/classes/add")}
-            >
-              Add Class
-            </Button>
-          </Box> */}
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>

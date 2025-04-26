@@ -27,10 +27,6 @@ export default function TeacherList() {
 
   return (
     <Paper sx={{ p: 3 }}>
-      {/* <Typography variant="h6" gutterBottom>
-        Teachers
-      </Typography> */}
-
       {teachers.length === 0 ? (
         <Box
           display="flex"
@@ -52,14 +48,6 @@ export default function TeacherList() {
         </Box>
       ) : (
         <>
-          {/* <Box display="flex" justifyContent="flex-end" mb={2}>
-            <Button
-              variant="contained"
-              onClick={() => navigate("/teachers/add")}
-            >
-              Add Teacher
-            </Button>
-          </Box> */}
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>

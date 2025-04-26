@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const Teacher = require("../models/teacherModel");
 
 // Teacher schema - with detailed validation messages
 const teacherSchema = Joi.object({
@@ -16,19 +17,15 @@ const teacherSchema = Joi.object({
     "any.required": "Subject is required",
   }),
 
-  // email: Joi.string()
-  //   .email({ tlds: { allow: false } })
-  //   .required()
-  //   .messages({
-  //     "string.base": "Email must be a string",
-  //     "string.email": "This email address is invalid",
-  //     "string.empty": "Email is required",
-  //     "any.required": "Email is required",
-  //   }),
-
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .required()
+    .external(async (value) => {
+      const existing = await Teacher.findOne({ where: { email: value } });
+      if (existing) {
+        throw new Error("Email already registered");
+      }
+    })
     .custom((value, helpers) => {
       if (value.endsWith("@gov.sg") || value.endsWith(".gov.sg")) {
         return helpers.message("This email address is Invalid");
@@ -53,11 +50,27 @@ const teacherSchema = Joi.object({
 });
 
 // Update schema — all fields optional, same rules
-const updateTeacherSchema = teacherSchema.fork(
-  ["name", "subject", "email", "contactNumber"],
-  (field) => field.optional()
-);
+const updateTeacherSchema = Joi.object({
+  name: Joi.string().min(2).optional(),
+  subject: Joi.string().min(2).optional(),
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .optional()
+    .external(async (value, helpers) => {
+      const { id } = helpers?.prefs?.context || {};
+      const existing = await Teacher.findOne({ where: { email: value } });
 
+      if (existing && existing.id !== id) {
+        throw new Error("Email already registered");
+      }
+    }),
+  contactNumber: Joi.string()
+    .pattern(/^[0-9]{8}$/)
+    .optional()
+    .messages({
+      "string.pattern.base": "Work contact number must be 8 digits",
+    }),
+});
 // Class creation schema — with detailed messages
 const classSchema = Joi.object({
   level: Joi.string().min(1).required().messages({
