@@ -1,79 +1,89 @@
 📘 School Management Portal
-A simple admin portal to manage Teachers and Classes in a school system.
+
+A full-stack school admin portal for managing teachers and classes
 
 Built with:
 
-🔙 Backend: Node.js + Express + Sequelize + MySQL
+    🔙 Backend: Node.js + Express + Sequelize + MySQL
 
-🔜 Frontend: React (Vite) + Material-UI (MUI)
+    🔜 Frontend: React (Vite) + Material-UI (MUI)
+
+    Containerization: Docker & Docker Compose
 
 🧩 Features
-👨‍🏫 Create, Update, Delete, and View Teachers
 
-🏫 Create, Update, Delete, and View Classes
+    👨‍🏫 Create, Update, Delete, and View Teachers
 
-🧩 Assign Teachers to Classes
+    🏫 Create, Update, Delete, and View Classes
 
-🎯 Client-side + Server-side Validation
+    🧩 Assign Teachers to Classes
 
-🔒 Unique Email Check for Teachers
+    🎯 Client-side + Server-side Validation
 
-💻 RESTful APIs
+    🔒 Reusable forms with validations
 
-🛠️ Tech Stack
+    💻 RESTful APIs  with Joi validations
 
-Layer | Tech
-Backend | Node.js, Express, Sequelize
-Database | MySQL
-Frontend | React.js, Material-UI
-Validation | Joi
+    MySQL database connection via Sequelize ORM
 
-🧪 Backend Setup (Node + Express + MySQL)
+    Frontend served with Vite + MUI
+
+    Ready-to-run with Docker Compose
+
+🧪 Validations
+
+    Implemented using Joi for backend validation.
+
+    Name and Subject must be at least 2 characters.
+
+    Email must be valid and must not be from .gov.sg domain.
+
+    Contact number must be 8 digits, no spaces allowed.
+
+    All fields validated during creation; optional validation for updates
+
+🧪 Backend Setup (Node + Express + MySQL) (Local Setup Without Docker)
+
 🔧 Prerequisites
-Node.js & npm
 
-    MySQL (running)
+        Node.js & npm
 
-    Postman (optional for testing)
+        MySQL (running)
 
-🚀 1. Setup Backend
-cd backend
-npm install
+        Postman (optional for testing)
 
-📄 2. Create .env
+1.  Clone the Repo
 
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=yourpassword
-DB_NAME=school
-DB_PORT=3306
-PORT=3002
+    git clone https://github.com/dareakl/school-management.git
 
-NODE_ENV=development
-#NODE_ENV=production
+2.  Set Up MySQL
 
-🗄️ 3. Configure Sequelize in config/db.js
+    Create a MySQL database named school:
 
-const { Sequelize } = require("sequelize");
-require("dotenv").config();
+3.  Setup Backend (In Terminal go to the backend folder)
 
-const sequelize = new Sequelize(
-process.env.DB_NAME,
-process.env.DB_USER,
-process.env.DB_PASSWORD,
-{
-host: process.env.DB_HOST,
-dialect: "mysql",
-port: process.env.DB_PORT,
-logging: false,
-}
-);
+    cd backend
+    npm install
 
-module.exports = sequelize;
-
-▶️ 4. Run the Server
+4.  Start backed (in terminal)
 
     npm start
+
+    You can see this in Terminal
+
+    Server is running on port 3002
+    Database synced with alter: true (dev mode)
+
+5.  Frontend Setup
+
+    cd ../frontend
+    npm install
+
+6.  Start Frontend:
+
+    npm run dev
+
+    Now open http://localhost:5173 to view the app in the browser.
 
 🔗 API Endpoints
 
@@ -95,77 +105,49 @@ POST | /api/classes | Create new class
 PUT | /api/classes/:id | Update class
 DELETE | /api/classes/:id | Delete class
 
-🎨 Frontend Setup (React + MUI)
+🐳 Docker Setup
 
-🔧 Prerequisites
-Node.js
+    1. Build & Run with Docker Compose
+        docker-compose up --build
 
-    npm / yarn
+    This will:
 
-🚀 1. Setup Frontend
+    Start MySQL on port 3306
 
-    cd frontend
-    npm install
+    Start the Node.js backend on http://localhost:3002
 
-🔁 2. Configure API Base URL
+    Serve the frontend React app at http://localhost:3000
 
-In frontend/src/services/api.js:
+🐞 Troubleshooting
 
-import axios from "axios";
+    DB Connection Refused: If running in Docker, make sure your backend uses host: 'mysql' instead of localhost
 
-const api = axios.create({
-baseURL: import.meta.env.VITE_API_BASE_URL,
-headers: {
-"Content-Type": "application/json",
-},
-});
+    Frontend makes wrong API calls: Double-check your .env and services/api.js file in frontend
 
-export default api;
+    Docker Port Conflicts: Stop any other MySQL, Node, or frontend dev servers before running docker-compose
 
-▶️ 3.Start Frontend (Vite Dev Server)
+🛠 Technologies Used
 
-    npm run dev
+    Tech                | Purpose
+    Node.js             | Backend runtime
+    Express.js          | REST API server
+    Sequelize           | ORM for MySQL
+    MySQL               | Relational DB
+    React + Vite        | Frontend framework
+    Material UI         | UI components
+    Docker              | Containerization
 
-📝 Notes
+📦 Docker Commands
 
-Data is stored in MySQL, using Sequelize ORM.
+    # Build containers
+    docker-compose up --build
 
-Email is unique for each teacher.
+    # Stop containers
+    docker-compose down
 
-Class requires a valid teacher's email for assignment.
+    # View logs
+    docker-compose logs -f
 
-Validation is done using Joi on both create and update.
-
-✅ Features
-
-Create / Edit / Delete Teachers
-
-Create / Edit / Delete Classes
-
-Assign teacher to class using email
-
-Client-side and server-side validation
-
-Friendly UI with MUI
-
-Error handling with helpful messages
-
-🧪 Validations
-
-Implemented using Joi for backend validation.
-
-Name and Subject must be at least 2 characters.
-
-Email must be valid and must not be from .gov.sg domain.
-
-Contact number must be 8 digits, no spaces allowed.
-
-All fields validated during creation; optional validation for updates
-
-🛡️ Production Considerations
-
-Don't use sequelize.sync({ force: true }) in production.
-
-Implement Sequelize migrations instead for database changes.
-
-Add authentication and role-based access for admins.
+    # Rebuild frontend or backend
+    docker-compose up --build frontend
+    docker-compose up --build backend
